@@ -1,0 +1,56 @@
+import numpy as np
+import scipy.stats
+from scipy.stats import ttest_ind
+from scipy.stats import t
+import pandas as pd
+import math
+
+from scipy.stats import bootstrap
+x = np.array([72, 76,68,74,82,100,106,80,83,73])
+y = np.array([79, 70, 74, 61, 95, 86, 124, 67, 67, 79])
+
+n1 = x.size
+n2 = y.size
+
+mx = np.mean(x)
+my = np.mean(y)
+vx = np.var(x, ddof=1)
+vy = np.var(y, ddof=1)
+delta = mx-my
+
+#========================================
+#Question 1 Part 1
+#========================================
+pooled_sd2 = math.sqrt((vx/n1)+(vy/n1))
+
+df = n1 + n2 - 2
+Z = 1.645
+Z2 = 1.96
+
+lb2sided1 = delta - Z2 * pooled_sd2
+ub2sided1 = delta + Z2 * pooled_sd2
+lb = delta - Z * pooled_sd2
+ub = delta + Z * pooled_sd2
+
+#========================================
+#Question 2 Part 2
+#========================================
+critical = scipy.stats.t.ppf(q=.05,df=df) * -1
+critical2 = scipy.stats.t.ppf(q=.025,df=df) * -1
+pooled_sd_unequal = math.sqrt((((n1-1)*vx)+((n2-1)*vy))/(n1+n2-2))
+
+lb2sided = delta - (critical2 * pooled_sd_unequal * math.sqrt((1/n1) + (1/n2)))
+ub2sided = delta + (critical2 * pooled_sd_unequal * math.sqrt((1/n1) + (1/n2)))
+lb2 = delta - (critical * pooled_sd_unequal * math.sqrt((1/n1) + (1/n2)))
+ub2 = delta + (critical * pooled_sd_unequal * math.sqrt((1/n1) + (1/n2)))
+
+#=========================================
+#Question 2 
+#=========================================
+x1 = (x,)
+
+bootstrap_ci = bootstrap(x1, np.median, confidence_level=0.95, random_state=1,method='percentile')
+#print(bootstrap_ci.confidence_interval)
+
+bootstrap_ci2 = bootstrap(x1, np.std, confidence_level=0.95,random_state=1,method='percentile')
+print(bootstrap_ci2.confidence_interval)

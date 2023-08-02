@@ -1,0 +1,12 @@
+select inventory_id, part_num from inventory_parts where color_id = 20;
+SELECT name, num_parts FROM sets WHERE num_parts BETWEEN 5000 and 6000;
+SELECT name FROM themes WHERE parent_id = 5 ORDER BY id DESC LIMIT 5;
+SELECT row_id, part_num FROM inventory_parts WHERE color_id = color and quantity < 4 ORDER BY inventory_id DESC LIMIT 10;
+SELECT year, count(set_num) FROM sets WHERE year > "%s" ORDER BY year ASC;
+SELECT year, count(set_num) FROM sets WHERE year > 2014 Group by year ORDER BY year ASC;
+SELECT inventory_id, sum(quantity) FROM inventory_parts group by inventory_id order by sum(quantity) desc limit 1;
+SELECT parent_id, count(parent_id) FROM themes where parent_id like "4%"  group by parent_id order by count(parent_id) asc;
+SELECT inventory_id, count(inventory_id) FROM inventory_sets GROUP BY inventory_id HAVING count(inventory_id) > 5 ORDER BY count(inventory_id) DESC;
+SELECT themes.id, avg(num_parts), themes.name FROM sets NATURAL JOIN themes GROUP BY num_parts;
+SELECT part_num, sum(inventory_parts.quantity) FROM colors JOIN inventory_parts ON id = color_id WHERE rgb LIKE "A%" GROUP BY part_num HAVING ((sum(inventory_parts.quantity) % 2) != 0) ORDER BY sum(inventory_parts.quantity) DESC LIMIT 5;
+SELECT themes.id, round(avg(sets.num_parts)),themes.name FROM sets JOIN themes on sets.theme_id = themes.id GROUP BY themes.id,themes.name HAVING themes.name != "Disney" ORDER BY round(avg(sets.num_parts)) DESC LIMIT 10;
